@@ -51,6 +51,9 @@ exports.postEditarProducto = (req, res, next) => {
     const descripcion = req.body.descripcion;
     Producto.findById(idProducto)
         .then(producto => {
+            if (producto.idUsuario.toString() !== req.usuario._id.toString()) {
+                return res.redirect('/');
+            }
             producto.nombre = nombre;
             producto.precio = precio;
             producto.descripcion = descripcion;
@@ -82,7 +85,7 @@ exports.getProductos = (req, res) => {
 
 exports.postEliminarProducto = (req, res, next) => {
     const idProducto = req.body.idProducto;
-    Producto.findByIdAndDelete(idProducto)
+    Producto.deleteOne({_id: idProducto, idUsuario: req.usuario._id})
         .then(result => {
             console.log('Producto eliminado satisfactoriamente');
             res.redirect('/admin/productos');
