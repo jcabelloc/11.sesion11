@@ -128,3 +128,18 @@ exports.postSalir = (req, res, next) => {
     res.redirect('/');
   });
 };
+
+
+exports.getReinicio = (req, res, next) => {
+  let mensaje = req.flash('error');
+  if (mensaje.length > 0) {
+    mensaje = mensaje[0];
+  } else {
+    mensaje = null;
+  }
+  res.render('auth/reinicio', {
+    path: '/reinicio',
+    titulo: 'Reinicio Password',
+    mensajeError: mensaje
+  });
+};

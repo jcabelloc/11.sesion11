@@ -14,6 +14,8 @@ router.post('/registrarse', authController.postRegistrarse);
 
 router.post('/salir', authController.postSalir);
 
+router.get('/reinicio', authController.getReinicio);
+
 
 
 module.exports = router;
