@@ -1,6 +1,20 @@
 const Usuario = require('../models/usuario')
 const bcrypt = require('bcryptjs');
 
+const nodemailer = require('nodemailer');
+const sendgridTransport = require('nodemailer-sendgrid-transport');
+
+
+const APIKEY = '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';
+
+const transporter = nodemailer.createTransport(
+  sendgridTransport({
+    auth: {
+      api_key:
+        APIKEY
+    }
+  })
+);
 
 
 let esPasswordComplejo = (password) => {
@@ -93,7 +107,14 @@ exports.postRegistrarse = (req, res, next) => {
         });
     })
     .then(result => {
+      console.log(result);
       res.redirect('/ingresar');
+      return transporter.sendMail({
+        to: email,
+        from: 'santaaparicioc@gmail.com', // El email que fue verificado en SendGrid
+        subject: 'Bienvenido, tu registro fue exitoso',
+        html: '<h1>Se ha dado de alta satisfactoriamente!</h1>'
+      })
     })
     .catch(err => {
       console.log(err);
